@@ -3,10 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/exiaohao/golang-template/pkg/common"
 	"github.com/exiaohao/golang-template/pkg/db"
 	"github.com/exiaohao/golang-template/pkg/example/router"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
+	"k8s.io/client-go/kubernetes"
 	"net/http"
 	"time"
 )
@@ -21,15 +23,20 @@ type HttpServer struct {
 	Ctx     context.Context
 	Port    uint16
 	Address string
+
+	kubeClient	*kubernetes.Clientset
 }
 
 func (hs *HttpServer) Initialize(opts InitOptions) {
-	//var err error
+	var err error
 
 	hs.Address = opts.Address
 	hs.Port = opts.Port
 
-	// Initialize kubernetes clients if required.
+	// Optional: Initialize kubernetes clients if required.
+	if hs.kubeClient, err = common.InitializeKubeClient(opts.KubeConfig); err != nil {
+		glog.Fatalf("initialize kubeclient failed by using %s: %v", opts.KubeConfig, err)
+	}
 }
 
 func (hs *HttpServer) Run(stopCh <-chan struct{}) {

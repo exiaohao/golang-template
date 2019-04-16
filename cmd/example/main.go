@@ -38,8 +38,11 @@ var (
 )
 
 func init() {
-	exampleCmd.PersistentFlags().StringVar(&opts.Address, "Server listen address, default 0.0.0.0", "0.0.0.0", "")
-	exampleCmd.PersistentFlags().Uint16Var(&opts.Port, "Server listen port, default 9000", 9000, "")
+	exampleCmd.PersistentFlags().StringVar(&opts.Address, "address" , "0.0.0.0", "Server listen address, default 0.0.0.0")
+	exampleCmd.PersistentFlags().Uint16Var(&opts.Port, "port", 9000, "Server listen port, default 9000")
+	// optional, only for kubeClient
+	// with default value, cobra will connect with default env config.
+	exampleCmd.PersistentFlags().StringVar(&opts.KubeConfig, "kubeconfig", "", "path to kubeconfig file")
 }
 
 func main() {
