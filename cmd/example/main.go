@@ -4,7 +4,6 @@ import (
 	"flag"
 	"github.com/exiaohao/golang-template/pkg/example/server"
 	"github.com/spf13/cobra"
-	"k8s.io/apiserver/pkg/util/logs"
 	"os"
 	"os/signal"
 	"syscall"
@@ -24,9 +23,6 @@ var (
 		Short: "your short descr here",
 		Long:  "your long descr here",
 		RunE: func(*cobra.Command, []string) error {
-			logs.InitLogs()
-			defer logs.FlushLogs()
-
 			server := new(server.HttpServer)
 			stopCh := setupSignalHandler()
 
