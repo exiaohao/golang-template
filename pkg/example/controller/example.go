@@ -5,10 +5,11 @@ import (
 	"github.com/exiaohao/golang-template/pkg/example/model"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
+	"time"
 )
 
 func Example(c *gin.Context) {
-	SuccessResponse(c, nil)
+	SuccessResponse(c, "hello, it's default result!")
 }
 
 
@@ -18,13 +19,35 @@ func MyBooks(c *gin.Context) {
 	SuccessResponse(c, 0)
 }
 
-func AddBooks(c *gin.Context) {
-	glog.Info("Add books called!")
-	var newBook model.Book
-	if err := c.BindJSON(newBook); err != nil {
-		glog.Info(err)
-	} else {
-		glog.Info(newBook)
+func MyBook(c *gin.Context) {
+	bookId := c.Param("id")
+	var book model.Book
+	if err := db.First(&book, bookId).Error; err != nil {
+		glog.Infof("Result Error: %s", err)
+		FailedResponse(c, err)
+		return
 	}
-	SuccessResponse(c, newBook)
+
+	SuccessResponse(c, book)
+}
+
+func AddBooks(c *gin.Context) {
+	var NewBookForm model.Book
+
+	if err := c.BindJSON(&NewBookForm); err != nil {
+		FailedResponse(c, err)
+		return
+	}
+	timeNow := time.Now()
+
+	NewBookForm.CreatedAt = timeNow
+	NewBookForm.UpdatedAt = timeNow
+	glog.Info(NewBookForm)
+
+	result := db.Save(&NewBookForm)
+	if result.Error != nil {
+		FailedResponse(c, result.Error)
+		return
+	}
+	SuccessResponse(c, NewBookForm)
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
@@ -14,4 +15,14 @@ type BaseModel struct {
 	ID        uint `gorm:"primary_key"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+func (m *BaseModel) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("CreatedAt", time.Now())
+	return nil
+}
+
+func (m *BaseModel) BeforeUpdate(scope *gorm.Scope) error {
+	scope.SetColumn("UpdatedAt", time.Now())
+	return nil
 }

@@ -2,9 +2,9 @@ package model
 
 type Book struct {
 	BaseModel
-	Title	string	`gorm:"type:varchar(64)"`
-	ISSN	string	`gorm:"type:varchar(32);unique_index"`
-	Author 	string	`gorm:"type:varchar(64)"`
+	Title	string	`gorm:"type:varchar(64)" json:"title"`
+	ISSN	string	`gorm:"type:varchar(32);unique_index" json:"issn" binding:"required"`
+	Author 	string	`gorm:"type:varchar(64)" json:"author"`
 }
 
 func (b *Book) TableName() string {

@@ -10,5 +10,6 @@ func RegisterRouter(r *gin.Engine) {
 
 	apiV1 := r.Group("/v1")
 	apiV1.GET("/books", controller.MyBooks)
+	apiV1.GET("/book/:id", controller.MyBook)
 	apiV1.POST("/book", controller.AddBooks)
 }

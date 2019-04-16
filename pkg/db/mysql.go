@@ -19,7 +19,8 @@ func init() {
 	dbPassword := common.GetEnv("db_password", "")
 	dbDatabase := common.GetEnv("db_database", "example")
 
-	dsn := fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4", dbUsername, dbPassword, dbHost, dbDatabase)
+	// parseTime=True helps parse type=`timestamp` fields to time.Time, more details to be filled.
+	dsn := fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4&parseTime=True", dbUsername, dbPassword, dbHost, dbDatabase)
 	db, err = gorm.Open(dialect, dsn)
 	if err != nil {
 		glog.Fatalf("Connect to %s via %s failed, because: %s", dialect, dsn, err)
