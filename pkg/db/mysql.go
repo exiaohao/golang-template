@@ -6,6 +6,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"time"
 )
 
 var db *gorm.DB
@@ -27,6 +28,14 @@ func init() {
 	if err != nil {
 		glog.Fatalf("Connect to %s via %s failed, because: %s", dialect, dsn, err)
 	}
+
+	// Make sure max lifetime is less than your ALB/MySQL instace's interactive_timeout
+	// to avoid 'Error: mysql is gone away'
+	// use `show variables like '%timeout';` get current interactive_timeout settings (default is 8h)
+	// make sure interactive_timeout is longer than ConnMaxLifetime
+	db.DB().SetConnMaxLifetime(3600 * time.Second)
+	db.DB().SetMaxIdleConns(5)
+	db.DB().SetMaxOpenConns(100)
 
 	// Auto Migration: Automatically migrate schema, keep schema update to date.
 	// AutoMigrate will ONLY create tables, missing columns and missing indexes,
