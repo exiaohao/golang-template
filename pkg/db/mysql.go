@@ -14,13 +14,15 @@ var err error
 func init() {
 	dialect := common.GetEnv("dialect", "mysql")
 
+	// dbHost need to filled as `tcp(127.0.0.1:3306)`
 	dbHost := common.GetEnv("db_host", "")
 	dbUsername := common.GetEnv("db_user", "root")
 	dbPassword := common.GetEnv("db_password", "")
 	dbDatabase := common.GetEnv("db_database", "example")
 
 	// parseTime=True helps parse type=`timestamp` fields to time.Time, more details to be filled.
-	dsn := fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4&parseTime=True", dbUsername, dbPassword, dbHost, dbDatabase)
+	// loc=Local use your (machine) local timezone, specific a timezone: loc=Asia%2FShanghai
+	dsn := fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUsername, dbPassword, dbHost, dbDatabase)
 	db, err = gorm.Open(dialect, dsn)
 	if err != nil {
 		glog.Fatalf("Connect to %s via %s failed, because: %s", dialect, dsn, err)
