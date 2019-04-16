@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/exiaohao/golang-template/pkg/db"
 	"github.com/exiaohao/golang-template/pkg/example/router"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
@@ -51,9 +52,10 @@ func (hs *HttpServer) Run(stopCh <-chan struct{}) {
 
 	<-stopCh
 	glog.Info("stopping server...")
+	db.CloseDB()
 	if err := srv.Shutdown(hs.Ctx); err != nil {
 		glog.Fatal("Server Shutdown:", err)
 	}
-	time.Sleep(5 * time.Second)
+	time.Sleep(2 * time.Second)
 	glog.Fatal("Server exiting")
 }

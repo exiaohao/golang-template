@@ -7,4 +7,8 @@ import (
 
 func RegisterRouter(r *gin.Engine) {
 	r.NoRoute(controller.Example)
+
+	apiV1 := r.Group("/v1")
+	apiV1.GET("/books", controller.MyBooks)
+	apiV1.POST("/book", controller.AddBooks)
 }
