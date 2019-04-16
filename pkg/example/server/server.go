@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/exiaohao/golang-template/pkg/db"
+	"github.com/exiaohao/golang-template/pkg/example/controller"
+	"github.com/exiaohao/golang-template/pkg/example/recovery"
 	"github.com/exiaohao/golang-template/pkg/example/router"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
@@ -41,7 +43,7 @@ func (hs *HttpServer) Run(stopCh <-chan struct{}) {
 	glog.Infof("Server started, Listen %s:%d", hs.Address, hs.Port)
 
 	r := gin.New()
-	r.Use(gin.Recovery())
+	r.Use(recovery.Recovery(controller.RecoveryHandler))
 
 	router.RegisterRouter(r)
 

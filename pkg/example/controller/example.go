@@ -9,6 +9,7 @@ import (
 )
 
 func Example(c *gin.Context) {
+	panic("My panic")
 	SuccessResponse(c, "hello, it's default result!")
 }
 
